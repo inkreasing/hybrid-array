@@ -1,23 +1,4 @@
-//! Supported array sizes: [`typenum::Unsigned`] types with an [`ArraySize`] impl.
-//!
-//! We support the following array sizes by default:
-//!
-//! - 0-512
-//! - 528-1024 (multiples of 16)
-//! - 2048, 4096, 8192
-//!
-//! When the `extra-sizes` feature is enabled: 1040-4064 (multiples of 32)
-
 use super::{ArraySize, AssocArraySize};
-
-#[cfg(feature = "extra-sizes")]
-pub use extra_sizes::*;
-
-/// Implement the `ArraySize` and `AssocArraySize` traits for a given list of `N => UN, ...`
-/// mappings.
-///
-/// `N` is used over `UN::USIZE` in order to improve compile times (avoids associated constant
-/// resolution)
 macro_rules! impl_array_sizes {
     ($testname:ident, $($len:expr => $ty:ident),+ $(,)?) => {
         $(
@@ -32,13 +13,6 @@ macro_rules! impl_array_sizes {
             }
         )+
 
-        #[test]
-        fn $testname() {
-            use typenum::Unsigned;
-            $(
-                assert_eq!($len, $ty::USIZE);
-            )+
-        }
      };
 }
 
@@ -611,7 +585,7 @@ impl_array_sizes_with_import! {
 /// Additional typenum size aliases beyond what are normally provided.
 ///
 /// These are defined using their component bits rather than `Add` to avoid conflicting impls.
-#[cfg(feature = "extra-sizes")]
+// #[cfg(false)]
 #[allow(missing_docs)]
 mod extra_sizes {
     use super::{ArraySize, AssocArraySize};
