@@ -1,4 +1,4 @@
-use crate::{ArraySize, AssocArraySize};
+use crate::{ArraySize};
 macro_rules! impl_array_sizes {
     ($testname:ident, $($len:expr => $ty:ident),+ $(,)?) => {
         $(
@@ -6,10 +6,6 @@ macro_rules! impl_array_sizes {
             // We ensure this property holds by having the macro write a test for that below.
             unsafe impl ArraySize for $ty {
                 type ArrayType<T> = [T; $len];
-            }
-
-            impl<T> AssocArraySize for [T; $len] {
-                type Size = $ty;
             }
         )+
 
@@ -588,7 +584,7 @@ impl_array_sizes_with_import! {
 // #[cfg(false)]
 #[allow(missing_docs)]
 mod extra_sizes {
-    use super::{ArraySize, AssocArraySize};
+    use super::{ArraySize};
     use typenum::{
         UInt, UTerm,
         consts::{B0, B1},
