@@ -1,4 +1,4 @@
-use super::{ArraySize, AssocArraySize};
+use crate::{ArraySize, AssocArraySize};
 macro_rules! impl_array_sizes {
     ($testname:ident, $($len:expr => $ty:ident),+ $(,)?) => {
         $(
