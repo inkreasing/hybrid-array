@@ -4,28 +4,43 @@ pub mod sizes;
 
 pub struct Array<T, U: ArraySize>(pub U::ArrayType<T>);
 
-impl<T, U, const N: usize> From<[T; N]> for Array<T, U>
-where
-    U: ArraySize<ArrayType<T> = [T; N]>,
-{
-    fn from(arr: [T; N]) -> Array<T, U> {
-        Array(arr)
-    }
-}
-
-impl<T, U, const N: usize> From<Array<T, U>> for [T; N]
-where
-    U: ArraySize<ArrayType<T> = [T; N]>,
-{
-    fn from(arr: Array<T, U>) -> [T; N] {
-        arr.0
-    }
-}
-
 pub unsafe trait ArraySize: typenum::Unsigned {
     type ArrayType<T>:
-        // commenting these out makes the new solver a lot faster
-        From<crate::Array<T, Self>>
-        + Into<crate::Array<T, Self>>
-        ;
+    MyFrom<crate::Array<T, Self>>
+    // these don't make a compile time difference
+    // + MyFrom2<crate::Array<T, Self>>
+    // + MyFrom3<crate::Array<T, Self>>
+    // + MyFrom4<crate::Array<T, Self>>
+    ;
 }
+
+pub trait MyFrom<T> {}
+
+impl<T, U, const N: usize> MyFrom<Array<T, U>> for [T; N]
+where
+    U: ArraySize<ArrayType<T> = [T; N]>,
+{
+}
+
+// these don't make a compile time difference
+// pub trait MyFrom2<T> {}
+
+// impl<T, U, const N: usize> MyFrom2<Array<T, U>> for [T; N]
+// where
+//     U: ArraySize<ArrayType<T> = [T; N]>,
+// {
+// }
+// pub trait MyFrom3<T> {}
+
+// impl<T, U, const N: usize> MyFrom3<Array<T, U>> for [T; N]
+// where
+//     U: ArraySize<ArrayType<T> = [T; N]>,
+// {
+// }
+// pub trait MyFrom4<T> {}
+
+// impl<T, U, const N: usize> MyFrom4<Array<T, U>> for [T; N]
+// where
+//     U: ArraySize<ArrayType<T> = [T; N]>,
+// {
+// }

@@ -1,9 +1,7 @@
-use crate::{ArraySize};
+use crate::ArraySize;
 macro_rules! impl_array_sizes {
     ($testname:ident, $($len:expr => $ty:ident),+ $(,)?) => {
         $(
-            // SAFETY: we depend on `<$ty as Unsigned>::USIZE == $len` for unsafe pointer casts.
-            // We ensure this property holds by having the macro write a test for that below.
             unsafe impl ArraySize for $ty {
                 type ArrayType<T> = [T; $len];
             }
@@ -581,10 +579,10 @@ impl_array_sizes_with_import! {
 /// Additional typenum size aliases beyond what are normally provided.
 ///
 /// These are defined using their component bits rather than `Add` to avoid conflicting impls.
-// #[cfg(false)]
+#[cfg(false)]
 #[allow(missing_docs)]
 mod extra_sizes {
-    use super::{ArraySize};
+    use super::ArraySize;
     use typenum::{
         UInt, UTerm,
         consts::{B0, B1},
